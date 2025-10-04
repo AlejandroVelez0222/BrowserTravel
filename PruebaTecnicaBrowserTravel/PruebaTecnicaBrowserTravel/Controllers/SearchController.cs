@@ -1,5 +1,6 @@
 ﻿namespace PruebaTecnicaBrowserTravel.Api.Controllers
 {
+    using BrowserTravel.Application.Dtos;
     using BrowserTravel.Application.Interfaces;
     using Microsoft.AspNetCore.Mvc;
 
@@ -8,17 +9,16 @@
     public class SearchController : ControllerBase
     {
         private readonly ISearchAppService _service;
-        public SearchController(ISearchAppService service) => _service = service;
 
-
-        [HttpGet]
-        public async Task<IActionResult> Get([FromQuery] string pickupLocation, [FromQuery] string returnLocation)
+        public SearchController(ISearchAppService service)
         {
-            if (string.IsNullOrWhiteSpace(pickupLocation) || string.IsNullOrWhiteSpace(returnLocation))
-                return BadRequest("pickupLocation y returnLocation son obligatorios");
+            _service = service;
+        }
 
-
-            var result = await _service.Search(pickupLocation, returnLocation);
+        [HttpPost("search")]
+        public async Task<IActionResult> SearchVehicles([FromBody] SearchRequest request)
+        {
+            var result = await _service.SearchAsync(request.SearchType, request.PickupLocation, request.DropoffLocation);
             return Ok(result);
         }
     }

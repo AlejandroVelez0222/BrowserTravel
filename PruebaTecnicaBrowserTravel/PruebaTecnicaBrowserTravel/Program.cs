@@ -17,8 +17,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 
-builder.Services.AddScoped<IVehicleRepository, VehicleRepository>();
 builder.Services.AddScoped<ISearchAppService, SearchAppService>();
+builder.Services.AddScoped<ISearchStrategy, MarketSearchStrategy>();
+builder.Services.AddScoped<ISearchStrategy, PickUpAndDropOffSearchStrategy>();
+builder.Services.AddScoped<ISearchStrategy, PickUpSearchStrategy>();
 
 
 var app = builder.Build();
