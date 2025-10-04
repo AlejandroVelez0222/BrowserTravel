@@ -1,4 +1,4 @@
-﻿namespace BrowserTravel.Infrastructure.Repositories
+﻿namespace BrowserTravel.Application.Interfaces
 {
     using BrowserTravel.Core.Domain;
     public interface IVehicleRepository

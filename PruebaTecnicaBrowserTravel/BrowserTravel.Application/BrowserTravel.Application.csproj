@@ -10,8 +10,4 @@
     <ProjectReference Include="..\BrowserTravel.Core\BrowserTravel.Core.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Interfaces\" />
-  </ItemGroup>
-
 </Project>

@@ -3,6 +3,7 @@
     using BrowserTravel.Core.Domain;
     using BrowserTravel.Infrastructure.Persistence;
     using Microsoft.EntityFrameworkCore;
+    using BrowserTravel.Application.Interfaces;
 
     public class VehicleRepository : IVehicleRepository
     {
@@ -21,7 +22,7 @@
 
             return await _db.Vehicles
             .Include(v => v.Locations)
-            .Where(v => v.Market == market && v.Locations.Any(l => l.LocationCode == pickupLocation && l.IsAvailable))
+            .Where(v => v.Market == market && v.Locations.Any(l => l.Location == pickupLocation && l.IsAvailable))
             .ToListAsync(cancellationToken);
         }
 

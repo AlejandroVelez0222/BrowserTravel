@@ -1,27 +1,28 @@
 using BrowserTravel.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
+using BrowserTravel.Application.Interfaces;
+using BrowserTravel.Infrastructure.Repositories.Impl;
+using BrowserTravel.Application.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-
-
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
-
+    options.UseMySql(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection"))
+    ));
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 
-builder.Services.AddScoped<BrowserTravel.Infrastructure.Repositories.IVehicleRepository, BrowserTravel.Infrastructure.Repositories.Impl.VehicleRepository>();
+builder.Services.AddScoped<IVehicleRepository, VehicleRepository>();
+builder.Services.AddScoped<ISearchAppService, SearchAppService>();
 
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
