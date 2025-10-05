@@ -156,8 +156,8 @@ namespace BrowserTravel.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<double>("PricePerDay")
-                        .HasColumnType("double");
+                    b.Property<decimal>("PricePerDay")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("Year")
                         .HasColumnType("int");
@@ -180,7 +180,7 @@ namespace BrowserTravel.Infrastructure.Migrations
                             Category = "Sedan",
                             MarketId = new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"),
                             Model = "Corolla",
-                            PricePerDay = 150000.0,
+                            PricePerDay = 150000m,
                             Year = 2020
                         },
                         new
@@ -191,7 +191,7 @@ namespace BrowserTravel.Infrastructure.Migrations
                             Category = "SUV",
                             MarketId = new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"),
                             Model = "CX-5",
-                            PricePerDay = 220000.0,
+                            PricePerDay = 220000m,
                             Year = 2022
                         },
                         new
@@ -202,7 +202,7 @@ namespace BrowserTravel.Infrastructure.Migrations
                             Category = "Hatchback",
                             MarketId = new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"),
                             Model = "Spark GT",
-                            PricePerDay = 120000.0,
+                            PricePerDay = 120000m,
                             Year = 2019
                         },
                         new
@@ -213,7 +213,7 @@ namespace BrowserTravel.Infrastructure.Migrations
                             Category = "Pickup",
                             MarketId = new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"),
                             Model = "Ranger",
-                            PricePerDay = 300000.0,
+                            PricePerDay = 300000m,
                             Year = 2021
                         },
                         new
@@ -224,7 +224,7 @@ namespace BrowserTravel.Infrastructure.Migrations
                             Category = "SUV",
                             MarketId = new Guid("bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"),
                             Model = "X3",
-                            PricePerDay = 350000.0,
+                            PricePerDay = 350000m,
                             Year = 2021
                         },
                         new
@@ -235,7 +235,7 @@ namespace BrowserTravel.Infrastructure.Migrations
                             Category = "Sedan",
                             MarketId = new Guid("bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"),
                             Model = "A4",
-                            PricePerDay = 300000.0,
+                            PricePerDay = 300000m,
                             Year = 2020
                         });
                 });
@@ -246,10 +246,6 @@ namespace BrowserTravel.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<string>("CardPlateId")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
-
                     b.Property<bool>("IsAvailable")
                         .HasColumnType("tinyint(1)");
 
@@ -257,9 +253,12 @@ namespace BrowserTravel.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<Guid>("VehicleId")
+                        .HasColumnType("char(36)");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("CardPlateId");
+                    b.HasIndex("VehicleId");
 
                     b.ToTable("VehicleLocations");
 
@@ -267,86 +266,86 @@ namespace BrowserTravel.Infrastructure.Migrations
                         new
                         {
                             Id = new Guid("44444444-4444-4444-4444-444444444441"),
-                            CardPlateId = "ABC123",
                             IsAvailable = true,
-                            Location = "Bogotá"
+                            Location = "Bogotá",
+                            VehicleId = new Guid("33333333-3333-3333-3333-333333333331")
                         },
                         new
                         {
                             Id = new Guid("44444444-4444-4444-4444-444444444442"),
-                            CardPlateId = "ABC123",
                             IsAvailable = true,
-                            Location = "Medellín"
+                            Location = "Medellín",
+                            VehicleId = new Guid("33333333-3333-3333-3333-333333333331")
                         },
                         new
                         {
                             Id = new Guid("44444444-4444-4444-4444-444444444443"),
-                            CardPlateId = "XYZ789",
                             IsAvailable = false,
-                            Location = "Bogotá"
+                            Location = "Bogotá",
+                            VehicleId = new Guid("33333333-3333-3333-3333-333333333332")
                         },
                         new
                         {
                             Id = new Guid("44444444-4444-4444-4444-444444444444"),
-                            CardPlateId = "XYZ789",
                             IsAvailable = true,
-                            Location = "Cartagena"
+                            Location = "Cartagena",
+                            VehicleId = new Guid("33333333-3333-3333-3333-333333333332")
                         },
                         new
                         {
                             Id = new Guid("55555555-5555-5555-5555-555555555551"),
-                            CardPlateId = "JKL456",
                             IsAvailable = true,
-                            Location = "Medellín"
+                            Location = "Medellín",
+                            VehicleId = new Guid("33333333-3333-3333-3333-333333333333")
                         },
                         new
                         {
                             Id = new Guid("55555555-5555-5555-5555-555555555552"),
-                            CardPlateId = "JKL456",
                             IsAvailable = false,
-                            Location = "Cali"
+                            Location = "Cali",
+                            VehicleId = new Guid("33333333-3333-3333-3333-333333333333")
                         },
                         new
                         {
                             Id = new Guid("55555555-5555-5555-5555-555555555553"),
-                            CardPlateId = "QWE321",
                             IsAvailable = true,
-                            Location = "Bogotá"
+                            Location = "Bogotá",
+                            VehicleId = new Guid("33333333-3333-3333-3333-333333333334")
                         },
                         new
                         {
                             Id = new Guid("55555555-5555-5555-5555-555555555554"),
-                            CardPlateId = "QWE321",
                             IsAvailable = true,
-                            Location = "Barranquilla"
+                            Location = "Barranquilla",
+                            VehicleId = new Guid("33333333-3333-3333-3333-333333333334")
                         },
                         new
                         {
                             Id = new Guid("66666666-6666-6666-6666-666666666661"),
-                            CardPlateId = "LMN987",
                             IsAvailable = true,
-                            Location = "Paris"
+                            Location = "Paris",
+                            VehicleId = new Guid("33333333-3333-3333-3333-333333333335")
                         },
                         new
                         {
                             Id = new Guid("66666666-6666-6666-6666-666666666662"),
-                            CardPlateId = "LMN987",
                             IsAvailable = false,
-                            Location = "Lyon"
+                            Location = "Lyon",
+                            VehicleId = new Guid("33333333-3333-3333-3333-333333333335")
                         },
                         new
                         {
                             Id = new Guid("66666666-6666-6666-6666-666666666663"),
-                            CardPlateId = "OPQ654",
                             IsAvailable = true,
-                            Location = "Berlin"
+                            Location = "Berlin",
+                            VehicleId = new Guid("33333333-3333-3333-3333-333333333336")
                         },
                         new
                         {
                             Id = new Guid("66666666-6666-6666-6666-666666666664"),
-                            CardPlateId = "OPQ654",
                             IsAvailable = true,
-                            Location = "Munich"
+                            Location = "Munich",
+                            VehicleId = new Guid("33333333-3333-3333-3333-333333333336")
                         });
                 });
 
@@ -376,8 +375,7 @@ namespace BrowserTravel.Infrastructure.Migrations
                 {
                     b.HasOne("BrowserTravel.Core.Domain.Vehicle", "Vehicle")
                         .WithMany("Locations")
-                        .HasForeignKey("CardPlateId")
-                        .HasPrincipalKey("CardPlateId")
+                        .HasForeignKey("VehicleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

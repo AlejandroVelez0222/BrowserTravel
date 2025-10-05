@@ -67,13 +67,12 @@ namespace BrowserTravel.Infrastructure.Migrations
                     Year = table.Column<int>(type: "int", nullable: false),
                     Category = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    PricePerDay = table.Column<double>(type: "double", nullable: false),
+                    PricePerDay = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     MarketId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci")
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Vehicles", x => x.Id);
-                    table.UniqueConstraint("AK_Vehicles_CardPlateId", x => x.CardPlateId);
                     table.ForeignKey(
                         name: "FK_Vehicles_Markets_MarketId",
                         column: x => x.MarketId,
@@ -88,8 +87,7 @@ namespace BrowserTravel.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    CardPlateId = table.Column<string>(type: "varchar(255)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    VehicleId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     Location = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     IsAvailable = table.Column<bool>(type: "tinyint(1)", nullable: false)
@@ -98,10 +96,10 @@ namespace BrowserTravel.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_VehicleLocations", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_VehicleLocations_Vehicles_CardPlateId",
-                        column: x => x.CardPlateId,
+                        name: "FK_VehicleLocations_Vehicles_VehicleId",
+                        column: x => x.VehicleId,
                         principalTable: "Vehicles",
-                        principalColumn: "CardPlateId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
@@ -135,31 +133,31 @@ namespace BrowserTravel.Infrastructure.Migrations
                 columns: new[] { "Id", "Brand", "CardPlateId", "Category", "MarketId", "Model", "PricePerDay", "Year" },
                 values: new object[,]
                 {
-                    { new Guid("33333333-3333-3333-3333-333333333331"), "Toyota", "ABC123", "Sedan", new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"), "Corolla", 150000.0, 2020 },
-                    { new Guid("33333333-3333-3333-3333-333333333332"), "Mazda", "XYZ789", "SUV", new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"), "CX-5", 220000.0, 2022 },
-                    { new Guid("33333333-3333-3333-3333-333333333333"), "Chevrolet", "JKL456", "Hatchback", new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"), "Spark GT", 120000.0, 2019 },
-                    { new Guid("33333333-3333-3333-3333-333333333334"), "Ford", "QWE321", "Pickup", new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"), "Ranger", 300000.0, 2021 },
-                    { new Guid("33333333-3333-3333-3333-333333333335"), "BMW", "LMN987", "SUV", new Guid("bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"), "X3", 350000.0, 2021 },
-                    { new Guid("33333333-3333-3333-3333-333333333336"), "Audi", "OPQ654", "Sedan", new Guid("bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"), "A4", 300000.0, 2020 }
+                    { new Guid("33333333-3333-3333-3333-333333333331"), "Toyota", "ABC123", "Sedan", new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"), "Corolla", 150000m, 2020 },
+                    { new Guid("33333333-3333-3333-3333-333333333332"), "Mazda", "XYZ789", "SUV", new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"), "CX-5", 220000m, 2022 },
+                    { new Guid("33333333-3333-3333-3333-333333333333"), "Chevrolet", "JKL456", "Hatchback", new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"), "Spark GT", 120000m, 2019 },
+                    { new Guid("33333333-3333-3333-3333-333333333334"), "Ford", "QWE321", "Pickup", new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"), "Ranger", 300000m, 2021 },
+                    { new Guid("33333333-3333-3333-3333-333333333335"), "BMW", "LMN987", "SUV", new Guid("bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"), "X3", 350000m, 2021 },
+                    { new Guid("33333333-3333-3333-3333-333333333336"), "Audi", "OPQ654", "Sedan", new Guid("bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"), "A4", 300000m, 2020 }
                 });
 
             migrationBuilder.InsertData(
                 table: "VehicleLocations",
-                columns: new[] { "Id", "CardPlateId", "IsAvailable", "Location" },
+                columns: new[] { "Id", "IsAvailable", "Location", "VehicleId" },
                 values: new object[,]
                 {
-                    { new Guid("44444444-4444-4444-4444-444444444441"), "ABC123", true, "Bogotá" },
-                    { new Guid("44444444-4444-4444-4444-444444444442"), "ABC123", true, "Medellín" },
-                    { new Guid("44444444-4444-4444-4444-444444444443"), "XYZ789", false, "Bogotá" },
-                    { new Guid("44444444-4444-4444-4444-444444444444"), "XYZ789", true, "Cartagena" },
-                    { new Guid("55555555-5555-5555-5555-555555555551"), "JKL456", true, "Medellín" },
-                    { new Guid("55555555-5555-5555-5555-555555555552"), "JKL456", false, "Cali" },
-                    { new Guid("55555555-5555-5555-5555-555555555553"), "QWE321", true, "Bogotá" },
-                    { new Guid("55555555-5555-5555-5555-555555555554"), "QWE321", true, "Barranquilla" },
-                    { new Guid("66666666-6666-6666-6666-666666666661"), "LMN987", true, "Paris" },
-                    { new Guid("66666666-6666-6666-6666-666666666662"), "LMN987", false, "Lyon" },
-                    { new Guid("66666666-6666-6666-6666-666666666663"), "OPQ654", true, "Berlin" },
-                    { new Guid("66666666-6666-6666-6666-666666666664"), "OPQ654", true, "Munich" }
+                    { new Guid("44444444-4444-4444-4444-444444444441"), true, "Bogotá", new Guid("33333333-3333-3333-3333-333333333331") },
+                    { new Guid("44444444-4444-4444-4444-444444444442"), true, "Medellín", new Guid("33333333-3333-3333-3333-333333333331") },
+                    { new Guid("44444444-4444-4444-4444-444444444443"), false, "Bogotá", new Guid("33333333-3333-3333-3333-333333333332") },
+                    { new Guid("44444444-4444-4444-4444-444444444444"), true, "Cartagena", new Guid("33333333-3333-3333-3333-333333333332") },
+                    { new Guid("55555555-5555-5555-5555-555555555551"), true, "Medellín", new Guid("33333333-3333-3333-3333-333333333333") },
+                    { new Guid("55555555-5555-5555-5555-555555555552"), false, "Cali", new Guid("33333333-3333-3333-3333-333333333333") },
+                    { new Guid("55555555-5555-5555-5555-555555555553"), true, "Bogotá", new Guid("33333333-3333-3333-3333-333333333334") },
+                    { new Guid("55555555-5555-5555-5555-555555555554"), true, "Barranquilla", new Guid("33333333-3333-3333-3333-333333333334") },
+                    { new Guid("66666666-6666-6666-6666-666666666661"), true, "Paris", new Guid("33333333-3333-3333-3333-333333333335") },
+                    { new Guid("66666666-6666-6666-6666-666666666662"), false, "Lyon", new Guid("33333333-3333-3333-3333-333333333335") },
+                    { new Guid("66666666-6666-6666-6666-666666666663"), true, "Berlin", new Guid("33333333-3333-3333-3333-333333333336") },
+                    { new Guid("66666666-6666-6666-6666-666666666664"), true, "Munich", new Guid("33333333-3333-3333-3333-333333333336") }
                 });
 
             migrationBuilder.CreateIndex(
@@ -168,9 +166,9 @@ namespace BrowserTravel.Infrastructure.Migrations
                 column: "MarketId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_VehicleLocations_CardPlateId",
+                name: "IX_VehicleLocations_VehicleId",
                 table: "VehicleLocations",
-                column: "CardPlateId");
+                column: "VehicleId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Vehicles_CardPlateId",

@@ -17,18 +17,15 @@
         {
             base.OnModelCreating(modelBuilder);
 
-            // Configuración de llaves y relaciones
             modelBuilder.Entity<Market>(entity =>
             {
                 entity.HasKey(m => m.Id);
-            });
-
-            modelBuilder.Entity<MarketRule>(entity =>
-            {
-                entity.HasKey(r => r.Id);
-                entity.HasOne(r => r.Market)
-                      .WithMany(m => m.Rules)
+                entity.HasMany(m => m.Rules)
+                      .WithOne(r => r.Market)
                       .HasForeignKey(r => r.MarketId);
+                entity.HasMany(m => m.Vehicles)
+                        .WithOne(v => v.Market)
+                        .HasForeignKey(v => v.MarketId);
             });
 
             modelBuilder.Entity<Vehicle>(entity =>
@@ -39,19 +36,17 @@
                       .WithMany(m => m.Vehicles)
                       .HasForeignKey(v => v.MarketId);
                 entity.Property(v => v.PricePerDay).HasColumnType("decimal(18,2)");
-                entity.HasMany(v => v.Locations)          // relación con Locations
-         .WithOne(l => l.Vehicle)
-         .HasForeignKey(l => l.CardPlateId);
+                entity.HasMany(v => v.Locations)
+                      .WithOne(l => l.Vehicle)
+                      .HasForeignKey(l => l.VehicleId);
             });
 
+            // VehicleLocation
             modelBuilder.Entity<VehicleLocation>(entity =>
             {
-
-                entity.HasOne(l => l.Vehicle)
-                      .WithMany(v => v.Locations)
-                      .HasPrincipalKey(v => v.CardPlateId)
-                      .HasForeignKey(l => l.CardPlateId);
+                entity.HasKey(l => l.Id);
             });
+
 
             var latamMarketId = Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
             var euMarketId = Guid.Parse("bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb");
@@ -92,28 +87,28 @@
             // VehicleLocations
             modelBuilder.Entity<VehicleLocation>().HasData(
                 // ABC123
-                new VehicleLocation { Id = Guid.Parse("44444444-4444-4444-4444-444444444441"), CardPlateId = "ABC123", Location = "Bogotá", IsAvailable = true },
-                new VehicleLocation { Id = Guid.Parse("44444444-4444-4444-4444-444444444442"), CardPlateId = "ABC123", Location = "Medellín", IsAvailable = true },
+                new VehicleLocation { Id = Guid.Parse("44444444-4444-4444-4444-444444444441"), VehicleId = Guid.Parse("33333333-3333-3333-3333-333333333331"), Location = "Bogotá", IsAvailable = true },
+                new VehicleLocation { Id = Guid.Parse("44444444-4444-4444-4444-444444444442"), VehicleId = Guid.Parse("33333333-3333-3333-3333-333333333331"), Location = "Medellín", IsAvailable = true },
 
                 // XYZ789
-                new VehicleLocation { Id = Guid.Parse("44444444-4444-4444-4444-444444444443"), CardPlateId = "XYZ789", Location = "Bogotá", IsAvailable = false },
-                new VehicleLocation { Id = Guid.Parse("44444444-4444-4444-4444-444444444444"), CardPlateId = "XYZ789", Location = "Cartagena", IsAvailable = true },
+                new VehicleLocation { Id = Guid.Parse("44444444-4444-4444-4444-444444444443"), VehicleId = Guid.Parse("33333333-3333-3333-3333-333333333332"), Location = "Bogotá", IsAvailable = false },
+                new VehicleLocation { Id = Guid.Parse("44444444-4444-4444-4444-444444444444"), VehicleId = Guid.Parse("33333333-3333-3333-3333-333333333332"), Location = "Cartagena", IsAvailable = true },
 
                 // JKL456
-                new VehicleLocation { Id = Guid.Parse("55555555-5555-5555-5555-555555555551"), CardPlateId = "JKL456", Location = "Medellín", IsAvailable = true },
-                new VehicleLocation { Id = Guid.Parse("55555555-5555-5555-5555-555555555552"), CardPlateId = "JKL456", Location = "Cali", IsAvailable = false },
+                new VehicleLocation { Id = Guid.Parse("55555555-5555-5555-5555-555555555551"), VehicleId = Guid.Parse("33333333-3333-3333-3333-333333333333"), Location = "Medellín", IsAvailable = true },
+                new VehicleLocation { Id = Guid.Parse("55555555-5555-5555-5555-555555555552"), VehicleId = Guid.Parse("33333333-3333-3333-3333-333333333333"), Location = "Cali", IsAvailable = false },
 
                 // QWE321
-                new VehicleLocation { Id = Guid.Parse("55555555-5555-5555-5555-555555555553"), CardPlateId = "QWE321", Location = "Bogotá", IsAvailable = true },
-                new VehicleLocation { Id = Guid.Parse("55555555-5555-5555-5555-555555555554"), CardPlateId = "QWE321", Location = "Barranquilla", IsAvailable = true },
+                new VehicleLocation { Id = Guid.Parse("55555555-5555-5555-5555-555555555553"), VehicleId = Guid.Parse("33333333-3333-3333-3333-333333333334"), Location = "Bogotá", IsAvailable = true },
+                new VehicleLocation { Id = Guid.Parse("55555555-5555-5555-5555-555555555554"), VehicleId = Guid.Parse("33333333-3333-3333-3333-333333333334"), Location = "Barranquilla", IsAvailable = true },
 
                 // LMN987
-                new VehicleLocation { Id = Guid.Parse("66666666-6666-6666-6666-666666666661"), CardPlateId = "LMN987", Location = "Paris", IsAvailable = true },
-                new VehicleLocation { Id = Guid.Parse("66666666-6666-6666-6666-666666666662"), CardPlateId = "LMN987", Location = "Lyon", IsAvailable = false },
+                new VehicleLocation { Id = Guid.Parse("66666666-6666-6666-6666-666666666661"), VehicleId = Guid.Parse("33333333-3333-3333-3333-333333333335"), Location = "Paris", IsAvailable = true },
+                new VehicleLocation { Id = Guid.Parse("66666666-6666-6666-6666-666666666662"), VehicleId = Guid.Parse("33333333-3333-3333-3333-333333333335"), Location = "Lyon", IsAvailable = false },
 
                 // OPQ654
-                new VehicleLocation { Id = Guid.Parse("66666666-6666-6666-6666-666666666663"), CardPlateId = "OPQ654", Location = "Berlin", IsAvailable = true },
-                new VehicleLocation { Id = Guid.Parse("66666666-6666-6666-6666-666666666664"), CardPlateId = "OPQ654", Location = "Munich", IsAvailable = true }
+                new VehicleLocation { Id = Guid.Parse("66666666-6666-6666-6666-666666666663"), VehicleId = Guid.Parse("33333333-3333-3333-3333-333333333336"), Location = "Berlin", IsAvailable = true },
+                new VehicleLocation { Id = Guid.Parse("66666666-6666-6666-6666-666666666664"), VehicleId = Guid.Parse("33333333-3333-3333-3333-333333333336"), Location = "Munich", IsAvailable = true }
             );
         }
 
