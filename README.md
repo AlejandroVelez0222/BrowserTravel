@@ -91,18 +91,6 @@ Allí podrás explorar y probar los endpoints disponibles del API.
 
 ---
 
-
-## 🧩 Tecnologías Utilizadas  
-
-| Capa | Tecnologías |
-|------|--------------|
-| Core | C#, .NET 8 |
-| Infraestructura | EF Core 9, Pomelo MySQL Provider |
-| Aplicación | DTOs, patrones Strategy y Repository |
-| API | ASP.NET Core Web API + Swagger |
-
----
-
 ## 👨‍💻 Autor  
 
 **Jorge Alejandro Vélez Quitián**  

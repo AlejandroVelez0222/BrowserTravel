@@ -20,7 +20,7 @@
                 throw new ArgumentException($"Unknown search type: {searchType}");
 
             var vehicles = await strategy.SearchAsync(pickup, dropoff);
-            return vehicles.Select(v => new VehicleDto(v.Id, v.CardPlateId, v.Brand, v.Model, v.Year, v.Category, v.Market.Name, v.PricePerDay));
+            return vehicles.Select(v => new VehicleDto(v.Id, v.CardPlateId, v.Brand, v.Model, v.Year, v.Category, v.Market?.Name, v.PricePerDay));
 
         }
     }
